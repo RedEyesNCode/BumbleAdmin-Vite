@@ -2,11 +2,14 @@ import { useEffect, useState } from "react";
 import { deleteUser, getAllUsers } from "../api/api_interface";
 import { toast, ToastContainer } from "react-toastify";
 import CreateUserDialog from "./dialogs/CreateUserDialog";
+import UpdateUserDialog from "./dialogs/UpdateUserDialog";
 
 function AdminHome() {
   const [userData, setUserData] = useState([]);
 
   const [showCreateUserDialog, setshowCreateUserDialog] = useState(false);
+
+  const [showUpdateUserDialog, setshowUpdateUserDialog] = useState(false);
 
   const fetchAllUsers = async () => {
     try {
@@ -40,6 +43,7 @@ function AdminHome() {
       console.error("Error deleting user:", error);
     }
   };
+
   useEffect(() => {
     fetchAllUsers();
   }, []);
@@ -97,6 +101,14 @@ function AdminHome() {
                         >
                           Delete User
                         </button>
+                        <button
+                          className="bg-amber-500 hover:bg-amber-700 cursor-pointer font-kumbh font-semibold text-white px-2 py-1 rounded text-xs"
+                          onClick={() => {
+                            setshowUpdateUserDialog(true);
+                          }}
+                        >
+                          Update User
+                        </button>
                       </div>
                     </td>
                     <td className="border p-2">{user.user_id}</td>
@@ -130,6 +142,14 @@ function AdminHome() {
                 fetchAllUsers();
 
                 setshowCreateUserDialog(false);
+              }}
+            />
+          )}
+          {showUpdateUserDialog && (
+            <UpdateUserDialog
+              onCloseDialog={() => {
+                fetchAllUsers();
+                setshowUpdateUserDialog(false);
               }}
             />
           )}
