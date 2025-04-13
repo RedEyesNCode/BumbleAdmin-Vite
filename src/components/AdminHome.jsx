@@ -136,6 +136,13 @@ function AdminHome() {
               </tbody>
             </table>
           </div>
+        </div>
+      ) : (
+        <div className="flex flex-col">
+          <div className="my-2 text-black font-semibold font-mono text-[24px] ps-4">
+            No user found!
+          </div>
+
           {showCreateUserDialog && (
             <CreateUserDialog
               onCloseDialog={() => {
@@ -153,12 +160,6 @@ function AdminHome() {
               }}
             />
           )}
-        </div>
-      ) : (
-        <div className="flex flex-col">
-          <div className="my-2 text-black font-semibold font-mono text-[24px] ps-4">
-            No user found!
-          </div>
         </div>
       )}
     </div>
