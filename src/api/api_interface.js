@@ -52,6 +52,19 @@ export const forgotPassword = async (forgot_password_data) => {
   }
 };
 
+export const getUserFeed = async (user_feed_data) => {
+  try {
+    const response = await apiService(
+      "date-me/user/get-feed",
+      "POST",
+      user_feed_data
+    );
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const getUserInterest = async (get_user_interest_data) => {
   try {
     const response = await apiService(

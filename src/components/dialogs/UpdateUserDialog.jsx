@@ -1,4 +1,5 @@
 import { ToastContainer } from "react-toastify";
+import { updateProfile } from "../../api/api_interface";
 
 function UpdateUserDialog({ onCloseDialog, user_id, userObj }) {
   const handleUpdateUser = async (_id) => {
@@ -6,9 +7,9 @@ function UpdateUserDialog({ onCloseDialog, user_id, userObj }) {
       const rawJson = {
         userId: _id,
       };
-      const updateResponse = await deleteUser(rawJson);
-      if (deleteResponse.code == 200) {
-        toast.success("User deleted successfully !");
+      const updateResponse = await updateProfile(rawJson);
+      if (updateResponse.code == 200) {
+        toast.success("User updated successfully !");
         fetchAllUsers();
       } else {
         toast.error("User profile not deleted !");

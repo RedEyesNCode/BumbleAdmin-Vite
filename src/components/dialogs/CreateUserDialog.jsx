@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import { createNewUser } from "../../api/api_interface";
+import SelectGenderDialog from "./SelectGenderDialog";
+import SelectUserInterests from "./SelectUserInterests";
 
 function CreateUserDialog({ onCloseDialog }) {
   const [userForm, setUserForm] = useState({
@@ -17,11 +19,17 @@ function CreateUserDialog({ onCloseDialog }) {
     interested_id: 0,
     coverImg: "",
     lat_: "",
+    userInterests: [0],
     long_: "",
     isVerified: "",
     dateOfBirth: "",
     date_ME_ID: "-1",
   });
+
+  const [genderDialog, setGenderDialog] = useState(false);
+
+  const [interestedGender, setInterestGender] = useState(false);
+  const [userInterests, setUserInterests] = useState(false);
 
   const callCreateUserAPI = async () => {
     console.log("CREATE_USER_FORM", userForm);
@@ -151,10 +159,14 @@ function CreateUserDialog({ onCloseDialog }) {
               <input
                 type="number"
                 name="gender_id"
-                // readOnly
+                readOnly
                 id="gender_id"
                 className="border rounded-sm p-1"
                 placeholder="Select Gender"
+                onClick={() => {
+                  setGenderDialog(true);
+                }}
+                value={userForm.gender_id}
                 onChange={(e) => {
                   handleChange(e);
                 }}
@@ -165,13 +177,33 @@ function CreateUserDialog({ onCloseDialog }) {
               <input
                 type="number"
                 name="interested_id"
-                // readOnly
+                readOnly
                 id="interested_id"
                 className="border rounded-sm p-1"
                 placeholder="Select Intersted Gender"
                 onChange={(e) => {
                   handleChange(e);
                 }}
+                onClick={() => {
+                  setInterestGender(true);
+                }}
+                value={userForm.interested_id}
+              />
+            </div>
+
+            <div className="flex flex-col m-2 font-kumbh">
+              <div className="my-2 text-black">User Interests</div>
+              <input
+                type="text"
+                name="userInterests"
+                readOnly
+                id="userInterests"
+                className="border rounded-sm p-1"
+                placeholder="Select User Interests"
+                onClick={() => {
+                  setUserInterests(true);
+                }}
+                value={userForm.userInterests?.join(", ") || ""}
               />
             </div>
             <div className="flex flex-col m-2 font-kumbh">
@@ -259,7 +291,7 @@ function CreateUserDialog({ onCloseDialog }) {
                 name="fcm_token"
                 id="fcm_token"
                 className="border rounded-sm p-1"
-                placeholder="Enter Date of Birth"
+                placeholder="Enter FCM Token"
                 onChange={(e) => {
                   handleChange(e);
                 }}
@@ -272,7 +304,7 @@ function CreateUserDialog({ onCloseDialog }) {
                 name="firebaseUID"
                 id="firebaseUID"
                 className="border rounded-sm p-1"
-                placeholder="Enter Date of Birth"
+                placeholder="Enter Firebase UID"
                 onChange={(e) => {
                   handleChange(e);
                 }}
@@ -285,7 +317,7 @@ function CreateUserDialog({ onCloseDialog }) {
                 name="date_ME_ID"
                 id="date_ME_ID"
                 className="border rounded-sm p-1"
-                placeholder="Enter Date of Birth"
+                placeholder="Enter Date_ME_ID "
                 onChange={(e) => {
                   handleChange(e);
                 }}
@@ -302,6 +334,44 @@ function CreateUserDialog({ onCloseDialog }) {
           </div>
         </div>
       </div>
+
+      {genderDialog && (
+        <SelectGenderDialog
+          onCloseDialog={() => setGenderDialog(false)}
+          onSubmit={(gender_onsubmit) => {
+            setGenderDialog(false);
+            setUserForm((prev) => ({
+              ...prev,
+              gender_id: gender_onsubmit.id,
+            }));
+          }}
+        />
+      )}
+      {interestedGender && (
+        <SelectGenderDialog
+          onCloseDialog={() => setInterestGender(false)}
+          onSubmit={(gender_onsubmit) => {
+            setInterestGender(false);
+            setUserForm((prev) => ({
+              ...prev,
+              interested_id: gender_onsubmit.id,
+            }));
+          }}
+        />
+      )}
+      {userInterests && (
+        <SelectUserInterests
+          onCloseDialog={() => setUserInterests(false)}
+          onSubmit={(interest_onsubmit) => {
+            setUserInterests(false);
+            setUserForm((prev) => ({
+              ...prev,
+              userInterests: interest_onsubmit.map((item) => item.id), // only IDs
+            }));
+            console.log("USER_INTEREST_UPDATED", userForm);
+          }}
+        />
+      )}
     </div>
   );
 }

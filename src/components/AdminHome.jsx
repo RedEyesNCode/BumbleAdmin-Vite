@@ -4,7 +4,7 @@ import { toast, ToastContainer } from "react-toastify";
 import CreateUserDialog from "./dialogs/CreateUserDialog";
 import UpdateUserDialog from "./dialogs/UpdateUserDialog";
 
-function AdminHome() {
+function AdminHome({ userFeedNavigate }) {
   const [userData, setUserData] = useState([]);
 
   const [showCreateUserDialog, setshowCreateUserDialog] = useState(false);
@@ -109,6 +109,14 @@ function AdminHome() {
                         >
                           Update User
                         </button>
+                        <button
+                          className="bg-purple-500 w-[75px] hover:bg-purple-700 cursor-pointer font-kumbh font-semibold text-white px-2 py-1 rounded text-xs"
+                          onClick={() => {
+                            userFeedNavigate(user);
+                          }}
+                        >
+                          View User Feed
+                        </button>
                       </div>
                     </td>
                     <td className="border p-2">{user.user_id}</td>
@@ -135,6 +143,23 @@ function AdminHome() {
                 ))}
               </tbody>
             </table>
+            {showCreateUserDialog && (
+              <CreateUserDialog
+                onCloseDialog={() => {
+                  fetchAllUsers();
+
+                  setshowCreateUserDialog(false);
+                }}
+              />
+            )}
+            {showUpdateUserDialog && (
+              <UpdateUserDialog
+                onCloseDialog={() => {
+                  fetchAllUsers();
+                  setshowUpdateUserDialog(false);
+                }}
+              />
+            )}
           </div>
         </div>
       ) : (
